@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require('bcrypt-nodejs');
 
 const app = express();
 app.use(express.json());
@@ -21,6 +22,13 @@ const database = {
             entries: 0,
             joined: new Date()
         }
+    ],
+    login: [
+        {
+            id: '987',
+            hash: '',
+            email: 'johndoe@gmail.com'
+        }
     ]
 };
 
@@ -30,6 +38,7 @@ app.get('/', (req, res) => {
 
 
 app.post('/signin', (req, res) => {
+
     if (req.body.email === database.users[0].email && req.body.password === database.users[0].password) {
         res.json('success');
     } else {
@@ -40,6 +49,10 @@ app.post('/signin', (req, res) => {
 
 app.post('/register', (req, res) => {
     const { email, name, password } = req.body;
+    bcrypt.hash(password, null, null, function(err, hash) {
+        // Store hash in your password DB.
+        console.log(hash);
+    });
     database.users.push({
         id: "125",
         name: name,
